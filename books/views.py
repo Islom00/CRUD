@@ -1,17 +1,30 @@
-from django.shortcuts import render
+from django.db.models import Q
+from django.http import Http404
+from django.shortcuts import render, get_object_or_404
+from .models import BookModel
 
 
-def index(request):
-    num1 = int(request.GET.get("num1", 0))
-    op = request.GET.get("op")
-    num2 = int(request.GET.get("num2", 0))
+def index(request, ):
+    q = request.GET.get("q")
+    if q:
+        data = BookModel.objects.filter(Q(title__icontains=q) | Q(summary__icontains=q))
+    else:
+        data = BookModel.objects.all()
+    context = {
+        "data": data
+    }
+    return render(request, "index.html", context)
 
-    result = 0
 
-    if op == "+":
-        result = num1 + num2
+def detail(request, pk):
+    # try:
+    #      data = BookModel.objects.get(pk=pk)
+    # except BookModel.DoesNotExist:
+    #     raise Http404
+    book = get_object_or_404(BookModel, pk=pk)
+
 
     context = {
-            "result": result
-        }
-    return render(request, "index.html", context)
+        "book": book
+    }
+    return render(request, "detail.html", context)

@@ -5,14 +5,15 @@
     <title>Title</title>
 </head>
 <body>
-<h1>Result: {{ result }}</h1>
-<form action="">
+<form>
     <label>
-        <input name="num1" type="text" placeholder="number1">
-        <input name="op" type="text" placeholder="operator">
-        <input name="num2" type="text" placeholder="number2">
+        <input value="{{ request.GET.q }}" type="text" name="q" placeholder="Search">
     </label>
-    <button>ok</button>
+    <button>Ok</button>
 </form>
+{% for i in data %}
+    <a href="{{ i.pk }}"><h1>{{ i.title }}</h1></a>
+    <h3>{{ i.summary }}</h3>
+{%  endfor %}
 </body>
 </html>
